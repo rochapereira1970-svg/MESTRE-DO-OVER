@@ -1,6 +1,5 @@
 import streamlit as st
 import json
-import os
 
 st.set_page_config(page_title="MESTRE DO OVER", page_icon="⚽", layout="centered")
 
@@ -50,25 +49,13 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-arquivo_dados = "jogos_gols.json"
-lista_total = []
-
-if os.path.exists(arquivo_dados):
-    with open(arquivo_dados, "r", encoding="utf-8") as f:
-        try:
-            lista_total = json.load(f).get("jogos", [])
-        except:
-            lista_total = []
-
-jogos_free = lista_total[:1] if lista_total else []
-jogos_vip = lista_total[1:] if len(lista_total) > 1 else lista_total
+jogos_free = json.loads('[{"id": 1, "Jogo": "HJK Helsinki x KuPS", "Campeonato": "Veikkausliiga (Finlândia)", "Mercado": "Total de Gols", "Previsão": "Mais de 2.5", "Confiança": "94%", "Horario": "01/06 às 14:00", "Status": "AGUARDANDO"}]')
+jogos_vip = json.loads('[{"Jogo": "Analisando mercados de gols para hoje", "Campeonato": "Ligas Globais", "Mercado": "Gols", "Previsão": "Processando...", "Confiança": "95%", "Horario": "Em breve", "Status": "AGUARDANDO"}]')
 
 aba1, aba2 = st.tabs(["📊 PALPITES FREE", "🔒 ACESSO VIP"])
 
 with aba1:
     st.write("")
-    if not jogos_free:
-        st.info("Nenhum palpite free gerado para hoje ainda.")
     for j in jogos_free:
         status_atual = j.get("Status", "AGUARDANDO")
         card_html = f'<div class="bet-card card-{status_atual}"><div class="card-header"><span>🏆 {j["Campeonato"]} — 📅 {j["Horario"]}</span><span class="status-badge badge-{status_atual}">{status_atual}</span></div><div class="card-teams">⚽ {j["Jogo"]}</div><div class="card-body-info"><div><div class="market-title">Mercado Sugerido</div><div style="font-weight:600; color:#fff;">{j["Mercado"]}</div></div><div style="text-align: right;"><div class="market-title">Entrada Indicada</div><div class="market-value">{j["Previsão"]}</div></div></div></div>'
@@ -84,8 +71,6 @@ with aba2:
     if senha == "VIP2026":
         st.write("")
         st.success("🔓 Acesso Premium Liberado! Bons Greens!")
-        if not jogos_vip:
-            st.info("A grade VIP está sendo processada pelo robô.")
         for j in jogos_vip:
             status_atual = j.get("Status", "AGUARDANDO")
             card_vip_html = f'<div class="bet-card card-{status_atual}"><div class="card-header"><span>👑 {j["Campeonato"]} — 📅 {j["Horario"]}</span><span class="status-badge badge-{status_atual}">{status_atual}</span></div><div class="card-teams">⚽ {j["Jogo"]}</div><div class="card-body-info"><div><div class="market-title">Mercado Sugerido</div><div style="font-weight:600; color:#fff;">{j["Mercado"]}</div></div><div style="text-align: right;"><div class="market-title">Entrada Indicada</div><div class="market-value" style="color:#ffaa00;">{j["Previsão"]}</div></div></div></div>'
