@@ -1,4 +1,4 @@
-name: Executar Robo de Gols
+name: Executar Robo de Gols de Hoje
 
 on:
   schedule:
