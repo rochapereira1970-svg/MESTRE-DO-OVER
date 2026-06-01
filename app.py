@@ -1,125 +1,80 @@
 import streamlit as st
 import json
-import requests
 
-# Configuração da página
-st.set_page_config(
-    page_title="Mestre do Over - Estatísticas Avançadas",
-    page_icon="⚽",
-    layout="wide"
-)
+st.set_page_config(page_title="MESTRE DO OVER", page_icon="⚽", layout="centered")
 
-# Estilização CSS Personalizada (Tema Mestre do Over - Esportivo e Moderno)
-style_css = """
+css_estilo = """
 <style>
-.main { background-color: #0b0f19; color: #f1f5f9; }
-.header-box { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 25px; border-radius: 16px; border: 1px solid #334155; text-align: center; margin-bottom: 20px; }
-.header-box h1 { color: #38bdf8; font-size: 30px; font-weight: 800; margin-bottom: 5px; text-transform: uppercase; }
-.header-box p { color: #94a3b8; font-size: 15px; margin: 0; }
-
-.fontes-container { background-color: #111827; padding: 12px; border-radius: 12px; border: 1px solid #1f2937; margin-bottom: 25px; text-align: center; }
-.fonte-tag { background-color: #1f2937; padding: 5px 12px; border-radius: 6px; font-weight: bold; font-size: 12px; display: inline-block; margin: 3px 6px; border: 1px solid #374151; }
-
-.card-analise { background-color: #1e293b; border-radius: 14px; padding: 20px; margin-bottom: 20px; border-left: 5px solid #38bdf8; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-.card-under { border-left-color: #10b981 !important; } /* Verde para mercado de segurança Under */
-
-.card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 15px; }
-.card-titulo { font-size: 18px; font-weight: bold; color: #ffffff; }
-
-.badge-odd { background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%); color: #ffffff; font-weight: 800; padding: 5px 12px; border-radius: 6px; font-size: 14px; }
-.badge-under { background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important; }
-
-.jogo-detalhes { background-color: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #1e293b; }
-.times-nome { font-size: 16px; font-weight: bold; color: #ffffff; }
-.campeonato-nome { font-size: 12px; color: #64748b; }
-
-.mercado-box { background-color: #0c4a6e; color: #38bdf8; padding: 8px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-top: 5px; }
-.mercado-under { background-color: #064e3b !important; color: #10b981 !important; }
-
-.justificativa-box { background-color: #111827; padding: 10px 14px; border-radius: 8px; border-left: 3px solid #64748b; font-size: 13px; color: #94a3b8; margin-top: 10px; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght=400;600;800&display=swap');
+    #MainMenu {visibility: hidden;} footer {visibility: hidden;} header {visibility: hidden;} stDeployButton {display:none;}
+    [data-testid="stToolbar"] {visibility: hidden !important;} [data-testid="stDecoration"] {display:none !important;}
+    
+    html, body, [data-testid="stAppViewContainer"] { background-color: #0b0f19; color: #f0f6fc; font-family: 'Inter', sans-serif; }
+    .main-title { text-align: center; font-size: 2.3rem; font-weight: 800; color: #ffaa00; margin-bottom: 5px; text-shadow: 0px 0px 10px rgba(255,170,0,0.2); }
+    .sub-title { text-align: center; font-size: 1.1rem; color: #8b949e; margin-bottom: 25px; }
+    .install-box { background-color: #121824; border: 1px dashed #ffaa00; border-radius: 10px; padding: 15px; margin-bottom: 25px; text-align: center; }
+    .install-title { font-weight: 800; color: #ffaa00; font-size: 1rem; margin-bottom: 5px; }
+    .install-text { font-size: 0.85rem; color: #c9d1d9; line-height: 1.4; }
+    .stTabs [data-baseweb="tab-list"] { gap: 10px; justify-content: center; }
+    .stTabs [data-baseweb="tab"] { background-color: #121824; border: 1px solid #21262d; border-radius: 8px; padding: 10px 25px; color: #8b949e; font-weight: 600; }
+    .stTabs [aria-selected="true"] { background-color: #ffaa00 !important; color: #0d1117 !important; border-color: #ffaa00 !important; }
+    .card-AGUARDANDO { border-left: 5px solid #f1c40f !important; }
+    .card-GREEN { border-left: 5px solid #2ecc71 !important; background: linear-gradient(135deg, #121824 0%, #1b3a24 100%) !important; }
+    .card-RED { border-left: 5px solid #e74c3c !important; background: linear-gradient(135deg, #121824 0%, #3a1c1c 100%) !important; }
+    .badge-AGUARDANDO { background-color: rgba(241, 196, 15, 0.15); color: #f1c40f; border: 1px solid #f1c40f; }
+    .badge-GREEN { background-color: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; font-weight: 800; }
+    .badge-RED { background-color: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c; }
+    .bet-card { background: linear-gradient(135deg, #121824 0%, #1c2333 100%); border-radius: 10px; padding: 20px; margin-bottom: 18px; border: 1px solid #21262d; }
+    .card-header { display: flex; justify-content: space-between; color: #8b949e; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; }
+    .card-teams { font-size: 1.3rem; font-weight: 700; color: #ffffff; margin-bottom: 12px; }
+    .card-body-info { display: flex; justify-content: space-between; align-items: center; background-color: #0b0f19; padding: 12px; border-radius: 8px; border: 1px solid #21262d; }
+    .market-title { font-size: 0.9rem; color: #8b949e; }
+    .market-value { font-size: 1.1rem; font-weight: 700; color: #ffaa00; }
+    .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
+    .vip-banner { background: linear-gradient(135deg, #ffaa00 0%, #e69900 100%); color: #0d1117; padding: 20px; border-radius: 10px; text-align: center; font-weight: 700; margin-top: 25px; }
 </style>
 """
-st.markdown(style_css, unsafe_allow_html=True)
+st.markdown(css_estilo, unsafe_allow_html=True)
 
-# Link do JSON do seu Mestre do Over (substitua pela sua URL real se necessário)
-JSON_URL = "https://raw.githubusercontent.com/rochapereira1970-svg/MESTRE-DO-OVER/main/jogos.json"
+st.markdown('<div class="main-title">🔥 MESTRE DO OVER</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-title">Algoritmo Estatístico focado em Linhas de Gols e BTTS</div>', unsafe_allow_html=True)
 
-def carregar_dados():
-    try:
-        resposta = requests.get(JSON_URL)
-        if resposta.status_code == 200:
-            return json.loads(resposta.text)
-    except:
-        pass
-    return None
-
-dados = carregar_dados()
-data_atualizacao = dados['ultima_atualizacao'] if dados else "Aguardando sincronização..."
-
-# Banner Principal
-st.markdown(f"""
-    <div class="header-box">
-        <h1>⚽ MESTRE DO OVER</h1>
-        <p>Análise Preditiva de Gols e Tendências de Escanteios</p>
-    </div>
-""", unsafe_allow_html=True)
-
-# Selos de Validação de Dados (SofaScore + Footstats + SokkerPRO)
 st.markdown("""
-    <div class="fontes-container">
-        <span style="color: #64748b; font-size: 12px; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 5px;">
-            🔍 Algoritmo Alimentado e Validado por Bancos de Dados Oficiais:
-        </span>
-        <div class="fonte-tag" style="color: #10b981;">📊 SofaScore.com</div>
-        <div class="fonte-tag" style="color: #3b82f6;">⚽ Footstats Premium</div>
-        <div class="fonte-tag" style="color: #a855f7;">📈 SokkerPRO AI</div>
+<div class="install-box">
+    <div class="install-title">📱 BAIXE O APP DIRETO NA TELA DO CELULAR</div>
+    <div class="install-text">
+        <b>No Android (Chrome):</b> Vá nos 3 pontinhos e escolha <b>'Instalar aplicativo'</b>.<br>
+        <b>No iPhone (Safari):</b> Clique em <b>Compartilhar</b> e escolha <b>'Adicionar à Tela de Início'</b>.
     </div>
+</div>
 """, unsafe_allow_html=True)
 
-st.info(f"🔄 **Última atualização do robô:** {data_atualizacao} | 🏟️ **Foco Atual:** Operações de Consistência (Série B e Ligas Ativas)")
+jogos_free = json.loads('[{"id": 1, "Jogo": "HJK Helsinki x KuPS", "Campeonato": "Veikkausliiga (Finlândia)", "Mercado": "Total de Gols", "Previsão": "Mais de 2.5", "Confiança": "94%", "Horario": "01/06 às 14:00", "Status": "AGUARDANDO"}]')
+jogos_vip = json.loads('[{"Jogo": "Analisando mercados de gols para hoje", "Campeonato": "Ligas Globais", "Mercado": "Gols", "Previsão": "Processando...", "Confiança": "95%", "Horario": "Em breve", "Status": "AGUARDANDO"}]')
 
-if not dados:
-    st.warning("O robô está processando a rodada da Série B nas bases de dados. Volte em instantes!")
-else:
-    # Divisão das exibições
-    st.subheader("🎯 Entradas Selecionadas para Hoje")
+aba1, aba2 = st.tabs(["📊 PALPITES FREE", "🔒 ACESSO VIP"])
+
+with aba1:
+    st.write("")
+    for j in jogos_free:
+        status_atual = j.get("Status", "AGUARDANDO")
+        card_html = f'<div class="bet-card card-{status_atual}"><div class="card-header"><span>🏆 {j["Campeonato"]} — 📅 {j["Horario"]}</span><span class="status-badge badge-{status_atual}">{status_atual}</span></div><div class="card-teams">⚽ {j["Jogo"]}</div><div class="card-body-info"><div><div class="market-title">Mercado Sugerido</div><div style="font-weight:600; color:#fff;">{j["Mercado"]}</div></div><div style="text-align: right;"><div class="market-title">Entrada Indicada</div><div class="market-value">{j["Previsão"]}</div></div></div></div>'
+        st.markdown(card_html, unsafe_allow_html=True)
+    st.markdown('<div class="vip-banner">🚀 LIBERAR MAIS DE 15 PALPITES DE HOJE?<div style="font-size:0.9rem; font-weight:400; margin-top:5px;">Assine a nossa licença premium e receba a grade completa com as maiores probabilidades de gols do mercado!</div></div>', unsafe_allow_html=True)
+
+with aba2:
+    st.write("")
+    st.markdown('<div style="background-color:#121824; padding:20px; border-radius:10px; border:1px solid #21262d;">', unsafe_allow_html=True)
+    senha = st.text_input("Insira sua chave de acesso VIP:", type="password", key="vip_key_over")
+    st.markdown('</div>', unsafe_allow_html=True)
     
-    # Exemplo de leitura de jogos do JSON
-    for jogo in dados.get("jogos_analisados", []):
-        
-        # Identifica se é mercado de Under para mudar a cor do cartão para verde descendo a linha visual
-        eh_under = "Under" in jogo.get("mercado", "") or "Menos" in jogo.get("mercado", "")
-        classe_card = "card-analise card-under" if eh_under else "card-analise"
-        classe_badge = "badge-odd badge-under" if eh_under else "badge-odd"
-        classe_mercado = "mercado-box mercado-under" if eh_under else "mercado-box"
-        
-        st.markdown(f"""
-            <div class="{classe_card}">
-                <div class="card-header">
-                    <span class="card-titulo">{'🛡️ SEGURANÇA (UNDER)' if eh_under else '🔥 OFENSIVO (OVER)'}</span>
-                    <span class="{classe_badge}">ODD: @{jogo['odd']}</span>
-                </div>
-                
-                <div class="jogo-detalhes">
-                    <div class="times-nome">{jogo['time_casa']} x {jogo['time_fora']}</div>
-                    <div class="campeonato-nome">🏆 {jogo['campeonato']} • ⏰ {jogo.get('horario', 'Horário na Casa')}</div>
-                </div>
-                
-                <div class="{classe_mercado}">
-                    Mercado: {jogo['mercado']}
-                </div>
-                
-                <div class="justificativa-box">
-                    <strong>📊 Cruzamento de Dados (SofaScore + Footstats):</strong><br>
-                    {jogo.get('justificativa', 'Estatísticas de volume indicam alta probabilidade para esta linha dentro do padrão da liga.')}
-                </div>
-            </div>
-        """, unsafe_allow_html=True)
-
-# Rodapé Educativo para Instalação como App
-st.markdown("""
-    <hr style="border-color: #1e293b;">
-    <div style="text-align: center; color: #64748b; font-size: 12px; padding: 10px;">
-        📲 <strong>Dica de Mestre:</strong> Abra este link no Safari (iPhone) ou Chrome (Android) e use a opção "Adicionar à Tela de Início" para salvar como um aplicativo nativo no seu celular!
-    </div>
-""", unsafe_allow_html=True)
+    if senha == "VIP2026":
+        st.write("")
+        st.success("🔓 Acesso Premium Liberado! Bons Greens!")
+        for j in jogos_vip:
+            status_atual = j.get("Status", "AGUARDANDO")
+            card_vip_html = f'<div class="bet-card card-{status_atual}"><div class="card-header"><span>👑 {j["Campeonato"]} — 📅 {j["Horario"]}</span><span class="status-badge badge-{status_atual}">{status_atual}</span></div><div class="card-teams">⚽ {j["Jogo"]}</div><div class="card-body-info"><div><div class="market-title">Mercado Sugerido</div><div style="font-weight:600; color:#fff;">{j["Mercado"]}</div></div><div style="text-align: right;"><div class="market-title">Entrada Indicada</div><div class="market-value" style="color:#ffaa00;">{j["Previsão"]}</div></div></div></div>'
+            st.markdown(card_vip_html, unsafe_allow_html=True)
+    elif senha != "":
+        st.write("")
+        st.error("❌ Chave inválida ou expirada.")
