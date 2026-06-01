@@ -1,0 +1,15 @@
+{
+    "data": "2026-06-01",
+    "jogos": [
+        {
+            "id": 1,
+            "Jogo": "HJK Helsinki x KuPS",
+            "Campeonato": "Veikkausliiga (Finlândia)",
+            "Mercado": "Total de Gols",
+            "Previsão": "Mais de 2.5",
+            "Confiança": "94%",
+            "Horario": "01/06 às 14:00",
+            "Status": "AGUARDANDO"
+        }
+    ]
+}
