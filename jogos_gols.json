@@ -1,23 +1,4 @@
 {
-  "ultima_atualizacao": "01/06/2026 - 20:20",
-  "jogos_analisados": [
-    {
-      "time_casa": "Santos",
-      "time_fora": "Operário-PR",
-      "campeonato": "Brasileirão Série B",
-      "horario": "19:00",
-      "mercado": "🔥 Over 1.5 Gols",
-      "odd": "1.35",
-      "justificativa": "Média combinada de 2.6 gols por partida no SofaScore. O Footstats indica que o Santos finaliza em média 14 vezes jogando na Vila Belmiro."
-    },
-    {
-      "time_casa": "Guarani",
-      "time_fora": "CRB",
-      "campeonato": "Brasileirão Série B",
-      "horario": "21:30",
-      "mercado": "🛡️ Under 14.5 Escanteios",
-      "odd": "1.18",
-      "justificativa": "Análise SofaScore mostra histórico de confrontos truncados. O Footstats confirma que ambas as equipes têm baixo índice de cruzamentos e preferem posse de bola no meio-campo."
-    }
-  ]
+    "data": "2026-06-01",
+    "jogos": []
 }

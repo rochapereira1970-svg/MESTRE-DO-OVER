@@ -49,7 +49,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-jogos_free = json.loads('[{"id": 1, "Jogo": "HJK Helsinki x KuPS", "Campeonato": "Veikkausliiga (Finlândia)", "Mercado": "Total de Gols", "Previsão": "Mais de 2.5", "Confiança": "94%", "Horario": "01/06 às 14:00", "Status": "AGUARDANDO"}]')
+jogos_free = json.loads('[{"Jogo": "Analisando mercados de gols para hoje", "Campeonato": "Ligas Globais", "Mercado": "Gols", "Previsão": "Processando...", "Confiança": "90%", "Horario": "Em breve", "Status": "AGUARDANDO"}]')
 jogos_vip = json.loads('[{"Jogo": "Analisando mercados de gols para hoje", "Campeonato": "Ligas Globais", "Mercado": "Gols", "Previsão": "Processando...", "Confiança": "95%", "Horario": "Em breve", "Status": "AGUARDANDO"}]')
 
 aba1, aba2 = st.tabs(["📊 PALPITES FREE", "🔒 ACESSO VIP"])
