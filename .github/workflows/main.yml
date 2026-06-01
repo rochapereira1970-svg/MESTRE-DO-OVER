@@ -2,7 +2,7 @@ name: Executar Robo de Gols
 
 on:
   schedule:
-    - cron: '0 9 * * *' # Roda todo dia às 6 da manhã no horário de Brasília
+    - cron: '0 9 * * *'
   workflow_dispatch:
 
 jobs:
