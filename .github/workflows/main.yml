@@ -1,0 +1,32 @@
+name: Executar Robo de Gols
+
+on:
+  schedule:
+    - cron: '0 9 * * *' # Roda todo dia às 6 da manhã no horário de Brasília
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Baixar Codigo
+      uses: actions/checkout@v3
+
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Instalar Dependencias
+      run: pip install requests
+
+    - name: Executar Script Inteligente
+      run: python cron_gols.py
+
+    - name: Salvar Dados no Github
+      run: |
+        git config --global user.name "Robo de Gols"
+        git config --global user.email "robo@gols.com"
+        git add jogos_gols.json app.py
+        git commit -m "Grade de Gols atualizada [skip ci]" || exit 0
+        git push
